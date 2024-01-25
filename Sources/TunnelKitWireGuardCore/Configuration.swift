@@ -28,41 +28,54 @@ import WireGuardKit
 import NetworkExtension
 
 public protocol WireGuardConfigurationProviding {
+    // MARK: - Wireguard default fileds
     var interface: InterfaceConfiguration { get }
-
     var peers: [PeerConfiguration] { get }
-
     var privateKey: String { get }
-
     var publicKey: String { get }
-
     var addresses: [String] { get }
-
     var dnsServers: [String] { get }
-
     var dnsSearchDomains: [String] { get }
-
     var dnsHTTPSURL: URL? { get }
-
     var dnsTLSServerName: String? { get }
-
     var mtu: UInt16? { get }
-
     var peersCount: Int { get }
+    
+    // MARK: - Wireguard custom fields
+    var jc: UInt16? { get set }
+    var jMin: UInt16? { get set }
+    var jMax: UInt16? { get set }
+    var s1: UInt16? { get set }
+    var s2: UInt16? { get set }
+    var h1: UInt32? { get set }
+    var h2: UInt32? { get set }
+    var h3: UInt32? { get set }
+    var h4: UInt32? { get set }
 
+    // MARK: - Config methods
     func publicKey(ofPeer peerIndex: Int) -> String
-
     func preSharedKey(ofPeer peerIndex: Int) -> String?
-
     func endpoint(ofPeer peerIndex: Int) -> String?
-
     func allowedIPs(ofPeer peerIndex: Int) -> [String]
-
     func keepAlive(ofPeer peerIndex: Int) -> UInt16?
 }
 
 extension WireGuard {
     public struct ConfigurationBuilder: WireGuardConfigurationProviding {
+        
+        // MARK: - Wireguard custom fields
+        public var jc: UInt16? = nil
+        public var jMin: UInt16? = nil
+        public var jMax: UInt16? = nil
+        public var s1: UInt16? = nil
+        public var s2: UInt16? = nil
+        public var h1: UInt32? = nil
+        public var h2: UInt32? = nil
+        public var h3: UInt32? = nil
+        public var h4: UInt32? = nil
+        
+        // MARK: - Wireguard default
+        
         private static let defaultGateway4 = IPAddressRange(from: "0.0.0.0/0")!
 
         private static let defaultGateway6 = IPAddressRange(from: "::/0")!
@@ -238,6 +251,18 @@ extension WireGuard {
     }
 
     public struct Configuration: Codable, Equatable, WireGuardConfigurationProviding {
+        // MARK: - Wireguard custom fields
+        public var jc: UInt16? = nil
+        public var jMin: UInt16? = nil
+        public var jMax: UInt16? = nil
+        public var s1: UInt16? = nil
+        public var s2: UInt16? = nil
+        public var h1: UInt32? = nil
+        public var h2: UInt32? = nil
+        public var h3: UInt32? = nil
+        public var h4: UInt32? = nil
+        
+        // MARK: - Wireguard default
         public let tunnelConfiguration: TunnelConfiguration
 
         public var interface: InterfaceConfiguration {
